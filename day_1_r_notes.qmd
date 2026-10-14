@@ -1,0 +1,11 @@
+---
+title: "Day_1 R notes :)"
+format: html
+---
+
+I'll write notes here....
+
+
+```{r}
+5 + 9 
+```
