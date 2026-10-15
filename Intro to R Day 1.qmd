@@ -1,0 +1,120 @@
+---
+title: "Intro to R Day 1"
+format: html
+---
+## Setup
+## Packages
+
+```{r}  ##ctrl+shift+i to add a code block
+library(tidyverse)
+```
+
+
+```{r}
+tidyverse_packages()
+```
+
+```{r}
+read_csv(file = "data/penguin_dataset.csv")
+penguins <- read_csv(file = "data/penguin_dataset.csv")
+```
+
+
+```{r} ##
+penguins |> head()
+penguins |> tail()
+penguins |> View()
+penguins |> summary()
+```
+
+
+```{r}
+head(penguins, 4)
+```
+
+#There are several different examples of warning and erros.
+```{r}
+library(heatmap)
+penguins2 <- read_csv(file = "penguins_dataset.csv")
+penguins |> mean(flipper_len)
+my_variable <- 0983
+my_varıable
+```
+
+
+```{r}
+glimpse(penguins)
+count(penguins,island)
+```
+# Or
+penguins |> glimpse()
+penguins |> count(island)
+
+
+```{r}
+ggplot(data = penguins,
+       mapping = aes(x = bill_len,
+                     y=bill_dep,
+                     color = species )) +
+
+geom_point()                    #this is to say which type of figure you need
+```
+
+```{r}
+penguins |> count(bill_len) |> arrange(n)
+```
+
+```{r}
+penguins |> relocate(year, .after=sex) #".after" or ".before"
+```
+
+```{r}
+penguins |> arrange(body_mass)
+```
+
+
+```{r}
+penguins |> arrange(desc(flipper_len))
+```
+
+# 3
+```{r}
+penguins |> arrange(species,bill_len) |> print(n=30)
+```
+
+# 4
+```{r}
+penguins |> relocate(bill_len, bill_dep, flipper_len, body_mass, .after=species)
+```
+
+# challenge
+```{r} 
+penguins |> arrange(desc(body_mass)) |> relocate(body_mass, bill_len, bill_dep, flipper_len, .after=species)
+```
+
+#&=and , |=or
+
+# 1
+```{r}
+penguins |> filter(species == "Adelie") |> count()
+```
+
+# 2
+```{r}
+penguins |> count(island)
+```
+
+# 3
+```{r}
+penguins |> filter(species == "Gentoo" & body_mass > 5000)
+```
+
+# 4
+```{r}
+penguins |> filter(sex == "male" | sex == "female") |> count()
+```
+
+# 5
+```{r}
+penguins |> filter(body_mass < 3500 & bill_len < 35) |> count()
+```
