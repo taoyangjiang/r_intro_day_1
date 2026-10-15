@@ -65,3 +65,59 @@ penguins |> filter(sex == "male" | sex == "female") |> count()
 ```{r}
 penguins |> filter(body_mass < 3500 & bill_len < 35) |> count()
 ```
+
+
+#select
+    We can select(A,B) or select(A:D) --> which select A,B,C,D
+    We can also use select(starts_with("xxx")), then replace xxx into the letter ot the word that we want to select.
+    We can also exclude things using select: select(!species) is gonna exclude column"species".
+        We can also intergate select(!contains("x")) into it. Then we will select colums that have x in it.
+
+
+```{r}
+penguins |> select(starts_with("b") | starts_with("f")) 
+```
+
+#The distinct function will remove rows that have the same value for a selected criteria.
+
+#1
+```{r}
+penguins |> distinct(species,island) |> head()
+```
+
+#2
+```{r}
+penguins |> filter(body_mass > 4000) |> distinct(sex)
+```
+
+#3
+```{r}
+penguins |> filter(species == "Gentoo" & island == "Biscoe") |> distinct(year)
+```
+
+# Inside one funciton, we can add different selection helplers, but inside one selection helplers, we can not have multiple criteria. 
+eg. select(starts_with("b"|"f")) --> select(stars_with("b") | select(starts_with("f")))
+
+# mutate()
+mutate() create a new column based on certain given calculation
+e.g. mutate(abcde = a / b). 
+*when there are a lot of command, it is better to create new line like L113-L117
+
+#1
+```{r}
+penguins |> 
+    mutate(body_mass_kg = body_mass / 1000)
+```
+
+#2
+```{r}
+penguins |> 
+    mutate(flipper_to_mass_ratio = flipper_len / body_mass) |> 
+    arrange(desc(flipper_to_mass_ratio))
+```
+
+#3
+```{r}
+penguins |> 
+    mutate(heavy = body_mass > 4500)
+```
