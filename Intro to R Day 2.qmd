@@ -6,11 +6,12 @@ format: html
 ```{r}
 library(tidyverse)
 ```
-
+# arrange
 ```{r}
 penguins |> count(bill_len) |> arrange(n)
 ```
 
+# relocate
 ```{r}
 penguins |> relocate(year, .after=sex) #".after" or ".before"
 ```
@@ -24,44 +25,44 @@ penguins |> arrange(body_mass)
 penguins |> arrange(desc(flipper_len))
 ```
 
-# 3
+#3
 ```{r}
 penguins |> arrange(species,bill_len) |> print(n=30)
 ```
 
-# 4
+#4
 ```{r}
 penguins |> relocate(bill_len, bill_dep, flipper_len, body_mass, .after=species)
 ```
 
-# challenge
+#challenge
 ```{r} 
 penguins |> arrange(desc(body_mass)) |> relocate(body_mass, bill_len, bill_dep, flipper_len, .after=species)
 ```
 
 #&=and , |=or
 
-# 1
+#1
 ```{r}
 penguins |> filter(species == "Adelie") |> count()
 ```
 
-# 2
+#2
 ```{r}
 penguins |> count(island)
 ```
 
-# 3
+#3
 ```{r}
 penguins |> filter(species == "Gentoo" & body_mass > 5000)
 ```
 
-# 4
+#4
 ```{r}
 penguins |> filter(sex == "male" | sex == "female") |> count()
 ```
 
-# 5
+#5
 ```{r}
 penguins |> filter(body_mass < 3500 & bill_len < 35) |> count()
 ```
@@ -95,7 +96,7 @@ penguins |> filter(body_mass > 4000) |> distinct(sex)
 penguins |> filter(species == "Gentoo" & island == "Biscoe") |> distinct(year)
 ```
 
-# Inside one funciton, we can add different selection helplers, but inside one selection helplers, we can not have multiple criteria. 
+#Inside one funciton, we can add different selection helplers, but inside one selection helplers, we can not have multiple criteria. 
 eg. select(starts_with("b"|"f")) --> select(stars_with("b") | select(starts_with("f")))
 
 # mutate()
@@ -121,3 +122,43 @@ penguins |>
 penguins |> 
     mutate(heavy = body_mass > 4500)
 ```
+
+# mutat with case_when()
+mutate(A = case_when(
+    B < 100 ~ "0-99"
+    B <=200 ~ "100-200"
+    TRUE = ">200"     #All the condition that can not fall into those 2 criteria.
+))
+
+
+```{r}
+
+penguins |> 
+    mutate(size = case_when(
+                   body_mass < 3600 & flipper_len <185 ~ "small",
+                   body_mass < 4500 & flipper_len <195~ "medium",
+                   TRUE ~ "big"
+)) |> 
+
+ggplot(
+       mapping = aes(x = bill_len,
+                     y = bill_dep,
+                     color = size
+       )
+) +
+
+geom_point()
+```
+# group_by()
+
+e.g.
+penguins |> 
+  group_by(species) |> 
+  summarize(mean_body_mass = mean(body_mass, na.rm = TRUE))  #na.rm = TRUE --> remove non applicable value.
+ 
+```{r}
+penguins |> 
+    group_by(species,island) |> 
+    summarize(mean_body_mass = mean(body_mass, na.rm = TRUE))
+```
+
